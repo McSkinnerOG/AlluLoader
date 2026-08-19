@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Allumeria">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Allumeria Demo\publicized_assemblies\Allumeria_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Mathematics">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Allumeria Demo\OpenTK.Mathematics.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
