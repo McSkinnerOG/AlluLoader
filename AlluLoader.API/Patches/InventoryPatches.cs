@@ -1,66 +1,68 @@
 ﻿using AlluLoader.API.Events;
-using AlluLoader.API.Logging;
 using Allumeria.Blocks.BlockEntities;
 using Allumeria.EntitySystem.Entities;
 using Allumeria.Items;
 using Allumeria.Items.Crafting;
 using HarmonyLib;
-using System.Collections.Concurrent;
 
 namespace AlluLoader.API.Patches;
 
 [HarmonyPatch]
 internal static class InventoryPatches
 {
-    static InventoryPatches()
-    {
-        try
-        {
-            var harmony = new Harmony("alluloader.api.inventory");
-            harmony.PatchAll();
-            Log.Write("Inventory API patches applied successfully.");
-        }
-        catch (Exception ex)
-        {
-            Log.Write("Failed to apply Inventory API patches", ex);
-        }
-    }
-
-    // ---- Storage for pending results ----
-    private static readonly ConcurrentDictionary<Inventory, object> _pendingAdd = new();
-    private static readonly ConcurrentDictionary<Inventory, object> _pendingTake = new();
-
     // ---- TryAddItem ----
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.TryAddItem))]
-    private static bool TryAddItemPrefix(Inventory __instance, ItemStack stackToAdd, bool ignoreHotbar, ref bool __result)
+    private static bool TryAddItemPrefix(Inventory __instance, ItemStack stackToAdd,
+        ref ItemStack newStack, bool ignoreHotbar, ref bool __result,
+        out InventoryAddItemEventArgs __state)
     {
-        var args = new InventoryAddItemEventArgs(__instance, stackToAdd, ignoreHotbar);
-        InventoryEvents.InvokeBeforeAddItem(args);
-        if (args.Cancelled)
+        __state = new InventoryAddItemEventArgs(__instance, stackToAdd, ignoreHotbar);
+        InventoryEvents.InvokeBeforeAddItem(__state);
+        if (__state.Cancelled)
         {
+            newStack = stackToAdd;
             __result = false;
             return false;
         }
-        _pendingAdd[__instance] = null;
         return true;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.TryAddItem))]
+    private static void TryAddItemPostfix(ref ItemStack newStack, bool __result,
+        InventoryAddItemEventArgs __state)
+    {
+        __state.Success = __result;
+        __state.Remainder = newStack;
+        InventoryEvents.InvokeAfterAddItem(__state);
     }
 
     // ---- TryTakeItem ----
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.TryTakeItem))]
-    private static bool TryTakeItemPrefix(Inventory __instance, ItemStack stackToTake, out ItemStack takenStack, ref bool __result)
+    private static bool TryTakeItemPrefix(Inventory __instance, ItemStack stackToTake,
+        ref ItemStack takenStack, ref bool __result, out InventoryTakeItemEventArgs __state)
     {
-        takenStack = null!;
-        var args = new InventoryTakeItemEventArgs(__instance, stackToTake);
-        InventoryEvents.InvokeBeforeTakeItem(args);
-        if (args.Cancelled)
+        __state = new InventoryTakeItemEventArgs(__instance, stackToTake);
+        InventoryEvents.InvokeBeforeTakeItem(__state);
+        if (__state.Cancelled)
         {
+            takenStack = new ItemStack(stackToTake.GetItem(), 0);
             __result = false;
             return false;
         }
-        _pendingTake[__instance] = null;
         return true;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.TryTakeItem))]
+    private static void TryTakeItemPostfix(ref ItemStack takenStack, bool __result,
+        InventoryTakeItemEventArgs __state)
+    {
+        __state.Success = __result;
+        __state.TakenStack = takenStack;
+        InventoryEvents.InvokeAfterTakeItem(__state);
     }
 
     // ---- ClearAll ----

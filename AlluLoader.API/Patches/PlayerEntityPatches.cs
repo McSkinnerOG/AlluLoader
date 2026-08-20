@@ -1,4 +1,4 @@
-﻿using AlluLoader.API.Events; 
+﻿using AlluLoader.API.Events;
 using Allumeria.Blocks.Blocks;
 using Allumeria.ChunkManagement;
 using Allumeria.EntitySystem;
@@ -6,208 +6,287 @@ using Allumeria.EntitySystem.Components;
 using Allumeria.EntitySystem.Entities;
 using Allumeria.Items;
 using HarmonyLib;
-using OpenTK.Mathematics; 
+using OpenTK.Mathematics;
 
 namespace AlluLoader.API.Patches;
 
 [HarmonyPatch(typeof(PlayerEntity))]
 internal static class PlayerEntityPatches
-{ 
-    static PlayerEntityPatches()
-    {
-         
-    } 
-
-    // ========== HealthComponent.TakeDamage ==========
+{
     [HarmonyPrefix]
     [HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamage))]
-    private static bool HealthTakeDamagePrefix(HealthComponent __instance, int amount, HealthComponent.DamageType damageType, bool stun, World world, bool ignoreIframes, ref bool __result)
+    private static bool HealthTakeDamagePrefix(HealthComponent __instance, int amount,
+        HealthComponent.DamageType damageType, bool stun, World world, bool ignoreIframes,
+        ref bool __result, out PlayerDamageEventArgs? __state)
     {
-        if (__instance.parent is PlayerEntity player)
-        {
-            var args = new PlayerDamageEventArgs(player, amount, damageType, stun, world, ignoreIframes);
-            PlayerEvents.InvokeBeforeDamage(args);
-            if (args.WasCancelled)
-            {
-                __result = false;
-                return false;  
-            }
-        }
-        return true; 
+        __state = null;
+        if (__instance.parent is not PlayerEntity player)
+            return true;
+
+        __state = new PlayerDamageEventArgs(player, amount, damageType, stun, world, ignoreIframes);
+        PlayerEvents.InvokeBeforeDamage(__state);
+        if (!__state.WasCancelled)
+            return true;
+
+        __result = false;
+        return false;
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(HealthComponent), nameof(HealthComponent.TakeDamage))]
-    private static void HealthTakeDamagePostfix(HealthComponent __instance, int amount, HealthComponent.DamageType damageType, bool stun, World world, bool ignoreIframes, bool __result)
+    private static void HealthTakeDamagePostfix(PlayerDamageEventArgs? __state, bool __result)
     {
-        if (__result && __instance.parent is PlayerEntity player)
+        if (__state is not null && !__state.WasCancelled && __result)
+            PlayerEvents.InvokeAfterDamage(__state);
+    }
+
+    [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.Die))]
+    private static class PlayerDiePatch
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(PlayerEntity __instance, World world, out PlayerDeathEventArgs __state)
         {
-            var args = new PlayerDamageEventArgs(player, amount, damageType, stun, world, ignoreIframes);
-            PlayerEvents.InvokeAfterDamage(args);
+            __state = new PlayerDeathEventArgs(__instance, world);
+            PlayerEvents.InvokeBeforeDeath(__state);
+            return !__state.Cancelled;
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(PlayerDeathEventArgs __state)
+        {
+            if (!__state.Cancelled)
+                PlayerEvents.InvokeAfterDeath(__state);
         }
     }
 
-    // ========== Death ==========
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerEntity.Die))]
-    private static void DiePostfix(PlayerEntity __instance, World world)
+    [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.Respawn),
+        new[] { typeof(World), typeof(bool), typeof(bool) })]
+    private static class PlayerRespawnPatch
     {
-        PlayerEvents.InvokeDeath(new PlayerDeathEventArgs(__instance, world));
+        [HarmonyPrefix]
+        private static bool Prefix(PlayerEntity __instance, World world, ref bool reset,
+            ref bool fromLogoff, out PlayerRespawnEventArgs __state)
+        {
+            __state = new PlayerRespawnEventArgs(__instance, world, reset, fromLogoff);
+            PlayerEvents.InvokeBeforeRespawn(__state);
+            reset = __state.Reset;
+            fromLogoff = __state.FromLogoff;
+            return !__state.Cancelled;
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(PlayerRespawnEventArgs __state)
+        {
+            if (!__state.Cancelled)
+                PlayerEvents.InvokeAfterRespawn(__state);
+        }
     }
 
-    // ========== Respawn ==========
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerEntity.Respawn), typeof(World))]
-    private static void RespawnPostfix(PlayerEntity __instance, World world)
+    [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.Teleport),
+        new[] { typeof(float), typeof(float), typeof(float) })]
+    private static class PlayerTeleportCoordinatesPatch
     {
-        PlayerEvents.InvokeRespawn(new PlayerRespawnEventArgs(__instance, world, true, false));
+        [HarmonyPrefix]
+        private static bool Prefix(PlayerEntity __instance, ref float x, ref float y, ref float z,
+            out PlayerTeleportEventArgs __state)
+        {
+            __state = new PlayerTeleportEventArgs(__instance, __instance.position, new Vector3(x, y, z));
+            PlayerEvents.InvokeBeforeTeleport(__state);
+            x = __state.Destination.X;
+            y = __state.Destination.Y;
+            z = __state.Destination.Z;
+            return !__state.Cancelled;
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(PlayerTeleportEventArgs __state)
+        {
+            if (!__state.Cancelled)
+                PlayerEvents.InvokeAfterTeleport(__state);
+        }
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerEntity.Respawn), typeof(World), typeof(bool), typeof(bool))]
-    private static void RespawnFullPostfix(PlayerEntity __instance, World world, bool reset, bool fromLogoff)
+    [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.Teleport), new[] { typeof(Vector3) })]
+    private static class PlayerTeleportVectorPatch
     {
-        PlayerEvents.InvokeRespawn(new PlayerRespawnEventArgs(__instance, world, reset, fromLogoff));
+        [HarmonyPrefix]
+        private static bool Prefix(PlayerEntity __instance, ref Vector3 pos,
+            out PlayerTeleportEventArgs __state)
+        {
+            __state = new PlayerTeleportEventArgs(__instance, __instance.position, pos);
+            PlayerEvents.InvokeBeforeTeleport(__state);
+            pos = __state.Destination;
+            return !__state.Cancelled;
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(PlayerTeleportEventArgs __state)
+        {
+            if (!__state.Cancelled)
+                PlayerEvents.InvokeAfterTeleport(__state);
+        }
     }
 
-    // ========== Jump ==========
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerEntity.Jump))]
-    private static void JumpPostfix(PlayerEntity __instance)
+    private static bool JumpPrefix(PlayerEntity __instance)
     {
-        PlayerEvents.InvokeJump(new PlayerJumpEventArgs(__instance, false));
-    } 
+        var args = new PlayerJumpEventArgs(__instance, false);
+        PlayerEvents.InvokeJump(args);
+        return !args.Cancelled;
+    }
 
-    // ========== Tick ==========
     [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerEntity.Tick))]
-    private static void TickPrefix(PlayerEntity __instance, Chunk chunk, World world)
-    {
+    private static void TickPrefix(PlayerEntity __instance, Chunk chunk, World world) =>
         PlayerEvents.InvokePreTick(new PlayerTickEventArgs(__instance, chunk, world));
-    }
 
     [HarmonyPostfix]
     [HarmonyPatch(nameof(PlayerEntity.Tick))]
-    private static void TickPostfix(PlayerEntity __instance, Chunk chunk, World world)
-    {
+    private static void TickPostfix(PlayerEntity __instance, Chunk chunk, World world) =>
         PlayerEvents.InvokeTick(new PlayerTickEventArgs(__instance, chunk, world));
-    }
 
-    // ========== Item Swapped ==========
-    [HarmonyPostfix]
-    [HarmonyPatch(nameof(PlayerEntity.OnHeldItemSwapped))]
-    private static void OnHeldItemSwappedPostfix(PlayerEntity __instance, bool sendToServer)
-    {
-        // We need previous and new item. 
-        var previous = __instance.previousHeldItem;
-        var newItem = __instance.heldItem;
-        PlayerEvents.InvokeItemSwapped(new PlayerItemSwappedEventArgs(__instance, previous, newItem, sendToServer));
-    }
-
-    // ========== Use Item (Left/Right Click) ==========
-    // We intercept both left‑click use (heldItem.leftClickUse) and right‑click use (OnUse).
     [HarmonyPrefix]
-    [HarmonyPatch(nameof(PlayerEntity.PlaceAndDestroy))]
-    private static bool PlaceAndDestroyPrefix(PlayerEntity __instance, ChunkManager chunkManager, World world)
+    [HarmonyPatch(nameof(PlayerEntity.OnHeldItemSwapped))]
+    private static bool OnHeldItemSwappedPrefix(PlayerEntity __instance, bool sendToServer)
     {
-         
-        return true;  
-    } 
-    // 1. Right‑click use  
+        var args = new PlayerItemSwappedEventArgs(
+            __instance, __instance.previousHeldItem, __instance.heldItem, sendToServer);
+        PlayerEvents.InvokeItemSwapped(args);
+        return !args.Cancelled;
+    }
+
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Item), nameof(Item.OnUse))]
     private static bool ItemOnUsePrefix(Item __instance, PlayerEntity player, World world)
     {
         var args = new PlayerUseItemEventArgs(player, __instance, false, world);
         PlayerEvents.InvokeUseItem(args);
-        if (args.Cancelled) return false; 
-        return true;
+        return !args.Cancelled;
     }
 
-    // 2. Left‑click use
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Item), nameof(Item.OnLeftClickUse))]
     private static bool ItemOnLeftClickUsePrefix(Item __instance, PlayerEntity player, World world)
     {
         var args = new PlayerUseItemEventArgs(player, __instance, true, world);
         PlayerEvents.InvokeUseItem(args);
-        if (args.Cancelled) return false;
-        return true;
+        return !args.Cancelled;
     }
 
-    // ========== Attack Entity ==========
     [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerEntity.DamageEntity))]
-    private static bool DamageEntityPrefix(PlayerEntity __instance, Entity punchedEntity, World world, ref int __result)
+    private static bool DamageEntityPrefix(PlayerEntity __instance, Entity punchedEntity, World world,
+        ref int __result, out PlayerAttackEntityEventArgs __state)
     {
-        var args = new PlayerAttackEntityEventArgs(__instance, punchedEntity, world);
-        PlayerEvents.InvokeAttackEntity(args);
-        if (args.Cancelled)
-        {
-            __result = 70;  
-            return false;  
-        }
-        return true;
+        __state = new PlayerAttackEntityEventArgs(__instance, punchedEntity, world);
+        PlayerEvents.InvokeAttackEntity(__state);
+        if (!__state.Cancelled)
+            return true;
+
+        __result = 70;
+        __state.AttackDelay = __result;
+        return false;
     }
 
-    // ========== Sweep Attack ==========
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerEntity.DamageEntity))]
+    private static void DamageEntityPostfix(PlayerAttackEntityEventArgs __state, int __result)
+    {
+        if (__state.Cancelled)
+            return;
+        __state.AttackDelay = __result;
+        PlayerEvents.InvokeAfterAttackEntity(__state);
+    }
+
     [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerEntity.SweepAttack))]
     private static bool SweepAttackPrefix(PlayerEntity __instance, World world)
     {
         var args = new PlayerSweepAttackEventArgs(__instance, world);
         PlayerEvents.InvokeSweepAttack(args);
-        if (args.Cancelled) return false;  
-        return true;
+        return !args.Cancelled;
     }
 
-    // ========== Place Block ==========
+    // BreakBlockAt. Block.OnBreak runs after the block is removed.
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(Block), nameof(Block.OnBreak))]
-    private static bool BlockOnBreakPrefix(Block __instance, Entity entity, int x, int y, int z, World world, uint metadata)
+    [HarmonyPatch(nameof(PlayerEntity.BreakBlockAt))]
+    private static bool BreakBlockPrefix(PlayerEntity __instance, Vector3i blockBreakPosition, World world)
     {
-        if (entity is PlayerEntity player)
-        {
-            var args = new PlayerBreakBlockEventArgs(player, new Vector3i(x, y, z), __instance, world);
-            PlayerEvents.InvokeBreakBlock(args);
-            if (args.Cancelled) return false; 
-        }
-        return true;
+        Block block = world.chunkManager.GetBlock(
+            blockBreakPosition.X, blockBreakPosition.Y, blockBreakPosition.Z);
+        var args = new PlayerBreakBlockEventArgs(__instance, blockBreakPosition, block, world);
+        PlayerEvents.InvokeBreakBlock(args);
+        return !args.Cancelled;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Block), nameof(Block.OnPlace))]
-    private static bool BlockOnPlacePrefix(Block __instance, Entity entity, int x, int y, int z, World world)
+    private static bool BlockOnPlacePrefix(Block __instance, PlayerEntity player,
+        int x, int y, int z, World world)
     {
-        if (entity is PlayerEntity player)
-        {
-            var args = new PlayerPlaceBlockEventArgs(player, new Vector3i(x, y, z), __instance, world);
-            PlayerEvents.InvokePlaceBlock(args);
-            if (args.Cancelled) return false;  
-        }
-        return true;
+        var args = new PlayerPlaceBlockEventArgs(player, new Vector3i(x, y, z), __instance, world);
+        PlayerEvents.InvokePlaceBlock(args);
+        return !args.Cancelled;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(Block), nameof(Block.OnRightClick))]
-    private static bool BlockOnRightClickPrefix(Block __instance, PlayerEntity player, int x, int y, int z, World world, uint metadata)
+    private static bool BlockOnRightClickPrefix(Block __instance, PlayerEntity player,
+        int x, int y, int z, World world, uint metadata)
     {
         var args = new PlayerInteractBlockEventArgs(player, new Vector3i(x, y, z), __instance, world);
         PlayerEvents.InvokeInteractBlock(args);
-        if (args.Cancelled) return false;  
-        return true;
+        return !args.Cancelled;
     }
 
-    // ========== Drop Item ==========
     [HarmonyPrefix]
     [HarmonyPatch(nameof(PlayerEntity.DropItem))]
-    private static bool DropItemPrefix(PlayerEntity __instance, ItemStack stack, World world)
+    private static bool DropItemPrefix(PlayerEntity __instance, ItemStack stack, World world,
+        out PlayerDropItemEventArgs __state)
     {
-        var args = new PlayerDropItemEventArgs(__instance, stack, world);
-        PlayerEvents.InvokeDropItem(args);
-        if (args.Cancelled) return false;  
-        return true;
+        __state = new PlayerDropItemEventArgs(__instance, stack, world);
+        PlayerEvents.InvokeDropItem(__state);
+        return !__state.Cancelled;
     }
 
-     
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerEntity.DropItem))]
+    private static void DropItemPostfix(PlayerDropItemEventArgs __state)
+    {
+        if (!__state.Cancelled)
+            PlayerEvents.InvokeAfterDropItem(__state);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(nameof(PlayerEntity.TryConsumeStamina))]
+    private static bool TryConsumeStaminaPrefix(PlayerEntity __instance, ref int amount,
+        ref bool __result, out PlayerStaminaConsumeEventArgs __state)
+    {
+        __state = new PlayerStaminaConsumeEventArgs(
+            __instance, amount, __instance.stamina, __instance.maxStamina);
+        PlayerEvents.InvokeBeforeConsumeStamina(__state);
+        amount = __state.Amount;
+        if (!__state.Cancelled)
+            return true;
+
+        __result = false;
+        __state.Success = false;
+        return false;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(nameof(PlayerEntity.TryConsumeStamina))]
+    private static void TryConsumeStaminaPostfix(PlayerEntity __instance,
+        PlayerStaminaConsumeEventArgs __state, bool __result)
+    {
+        if (__state.Cancelled)
+            return;
+        __state.Success = __result;
+        __state.NewStamina = __instance.stamina;
+        PlayerEvents.InvokeAfterConsumeStamina(__state);
+        if (__state.OldStamina != __state.NewStamina)
+            PlayerEvents.InvokeStaminaChanged(new PlayerStaminaEventArgs(
+                __instance, __state.OldStamina, __state.NewStamina, __instance.maxStamina));
+    }
 }

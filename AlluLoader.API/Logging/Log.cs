@@ -27,8 +27,7 @@ namespace AlluLoader.API.Logging
                 _initialized = true;
             }
             catch
-            {
-                // Fallback to current directory if we can't create the expected path
+            { 
                 _logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "alluloader_api.log");
                 _initialized = true;
             }
@@ -46,7 +45,7 @@ namespace AlluLoader.API.Logging
             }
             catch
             {
-                // Ignore logging failures – never crash the game.
+             
             }
         } 
 
