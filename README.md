@@ -5,7 +5,7 @@ It launches the game with a .NET startup hook, applies runtime patches through [
 > [!WARNING]
 > AlluLoader modifies the game process at runtime. Back up your saves before testing mods, and only install mods from authors you trust.
 
-[!WARNING]
+> [!WARNING]
 > AlluLoader does NOT use the games exposed mod-loader entrypoint! It is HIGHLY likely this will cause issues with other mods.
 
 ## Requirements
