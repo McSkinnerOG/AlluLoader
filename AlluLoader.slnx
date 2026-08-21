@@ -1,6 +1,5 @@
 <Solution>
-  <Project Path="AlluLoader.API/AlluLoader.API.csproj"/>
-  <Project Path="AlluLoader/AlluLoader.csproj"/>
+  <Project Path="Loader/Loader.csproj"/>
   <Project Path="Launcher/Launcher.csproj"/>
   <Project Path="ExampleMod/ExampleMod.csproj"/>
 </Solution>
