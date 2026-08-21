@@ -1,13 +1,6 @@
 <Solution>
-  <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-  </Configurations>
-  <Project Path="AlluLoader.API/AlluLoader.API.csproj" Id="b966419d-7fd0-4aba-960f-2a5e20834d2b" />
-  <Project Path="AlluLoader/AlluLoader.csproj">
-    <BuildType Solution="Debug|x64" Project="Release" />
-    <Platform Solution="*|x64" Project="x64" />
-  </Project>
-  <Project Path="ExampleAlluLoaderMod/ExampleAlluLoaderMod.csproj" Id="9ec082fd-7e2d-4d59-baf3-0b6e57a65041" />
-  <Project Path="Launcher/AlluModLauncher.csproj" Id="4b33e1f1-7902-49ca-826b-756f3dec9ddf" />
+  <Project Path="AlluLoader.API/AlluLoader.API.csproj"/>
+  <Project Path="AlluLoader/AlluLoader.csproj"/>
+  <Project Path="Launcher/Launcher.csproj"/>
+  <Project Path="ExampleMod/ExampleMod.csproj"/>
 </Solution>

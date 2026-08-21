@@ -4,7 +4,7 @@ using AlluLoader.API.Logging;
 using Allumeria.EntitySystem.Components;
 using Allumeria.EntitySystem.Entities;
 
-namespace ExampleAlluLoaderMod;
+namespace ExampleMod;
 
 /// <summary>
 /// Demonstrates observational, cancellable, and mutable AlluLoader events.

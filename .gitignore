@@ -1,19 +1,5 @@
-.vs/AlluLoader.slnx/DesignTimeBuild/.dtbcache.v2
-.vs/AlluLoader.slnx/v18/.futdcache.v2
-.vs/AlluLoader.slnx/v18/.suo
-.vs/AlluLoader.slnx/v18/DocumentLayout.backup.json
-.vs/ProjectEvaluation/alluloader.metadata.v10.bin
-.vs/ProjectEvaluation/alluloader.projects.v10.bin
-.vs/ProjectEvaluation/alluloader.strings.v10.bin
-.vs/AlluLoader.slnx/v18/DocumentLayout.json
-/AlluLoader.API/bin
-/AlluLoader.API/obj
-/AlluLoader/bin
-/AlluLoader/obj
-/ExampleAlluLoaderMod/bin
-/ExampleAlluLoaderMod/obj
-/Launcher/bin
-/Launcher/obj
-/.vs
-AlluLoader/StartupHook.cs.bak
-AlluLoader/StartupHook.cs.bak
+# ignore files and directories produced by build processes
+.vs/
+bin/
+obj/
+*bak
