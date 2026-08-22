@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <!--https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview-->
     <ImplicitUsings>enable</ImplicitUsings>
+    <!--https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language-->
     <Nullable>enable</Nullable>
-    <DependenciesDirectory>$(MSBuildProjectDirectory)/../Dependencies</DependenciesDirectory>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" />
     <Reference Include="Allumeria">
-      <HintPath>$(DependenciesDirectory)/Allumeria.dll</HintPath>
+      <HintPath>../Dependencies/Allumeria.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.Mathematics">
-      <HintPath>$(DependenciesDirectory)/OpenTK.Mathematics.dll</HintPath>
+      <HintPath>$../Dependencies/OpenTK.Mathematics.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
