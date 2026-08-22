@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="AlluLoader/AlluLoader.csproj"/>
-  <Project Path="Launcher/Launcher.csproj"/>
+  <Project Path="Loader/Loader.csproj"/>
   <Project Path="ExampleMod/ExampleMod.csproj"/>
 </Solution>
