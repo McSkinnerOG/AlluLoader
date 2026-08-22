@@ -4,5 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!--We need to force a Windows .exe-->
+    <!--learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 </Project>
