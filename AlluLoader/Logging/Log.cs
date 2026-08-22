@@ -5,7 +5,7 @@ using System.Text;
 namespace AlluLoader.Logging
 {
     /// <summary>
-    /// Simple logging for mods and the API. Writes to AlluLoader/Logs/api.log.
+    /// Write to an alluloader.log file
     /// </summary>
     public static class Log
     {
