@@ -6,7 +6,7 @@ using Allumeria.EntitySystem.Entities;
 using Allumeria.Items;
 using OpenTK.Mathematics;
 
-namespace AlluLoader.API.Events;
+namespace AlluLoader.Events;
 
 public class PlayerEventArgs(PlayerEntity player) : EventArgs { public PlayerEntity Player { get; } = player; }
 

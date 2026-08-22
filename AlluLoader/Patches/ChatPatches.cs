@@ -1,4 +1,4 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 using Allumeria;
 using Allumeria.ChunkManagement;
 using Allumeria.EntitySystem.Entities;
@@ -6,7 +6,7 @@ using Allumeria.Networking;
 using Allumeria.UI;
 using HarmonyLib;
 
-namespace AlluLoader.API.Patches;
+namespace AlluLoader.Patches;
 
 [HarmonyPatch]
 internal static class ChatPatches

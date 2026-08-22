@@ -1,10 +1,10 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 using Allumeria.ChunkManagement;
 using Allumeria.EntitySystem;
 using Allumeria.EntitySystem.Components;
 using HarmonyLib;
 
-namespace AlluLoader.API.Patches;
+namespace AlluLoader.Patches;
 
 [HarmonyPatch]
 internal static class EntityPatches

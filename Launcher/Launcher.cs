@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-internal static class Program
+internal static class Launcher
 {
     private const string GameExecutable = "Allumeria.exe";
     private const string LoaderAssembly = "AlluLoader.dll";

@@ -20,7 +20,7 @@ It launches the game with a .NET startup hook, applies runtime patches through [
 - Cross platform mod file loading **`Currently The AlluLauncher is windows only though.`**
 
 ## Installation
-Place the `AlluLoader.exe` and `AlluLoader.dll` beside `Allumeria.exe`. Put the `AlluLoader.API.dll` and `0Harmony.dll` in `AlluLoader/Libraries`.
+Place the `AlluLoader.exe` and `AlluLoader.dll` beside `Allumeria.exe`. Put the `AlluLoader.dll` and `0Harmony.dll` in `AlluLoader/Libraries`.
 
 ## API Development Status
 - [x] Player events

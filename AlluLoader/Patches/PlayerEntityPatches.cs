@@ -1,4 +1,4 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 using Allumeria.Blocks.Blocks;
 using Allumeria.ChunkManagement;
 using Allumeria.EntitySystem;
@@ -8,7 +8,7 @@ using Allumeria.Items;
 using HarmonyLib;
 using OpenTK.Mathematics;
 
-namespace AlluLoader.API.Patches;
+namespace AlluLoader.Patches;
 
 [HarmonyPatch(typeof(PlayerEntity))]
 internal static class PlayerEntityPatches

@@ -1,5 +1,4 @@
-﻿ 
-namespace AlluLoader.API
+﻿namespace AlluLoader
 {
     public interface IMod
     {

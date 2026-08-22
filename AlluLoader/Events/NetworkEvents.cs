@@ -1,6 +1,6 @@
 ﻿using Allumeria.Networking;
 
-namespace AlluLoader.API.Events;
+namespace AlluLoader.Events;
 
 public enum PacketDirection
 {

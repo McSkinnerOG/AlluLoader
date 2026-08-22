@@ -1,7 +1,7 @@
 ﻿using Allumeria.UI;
 using Allumeria.EntitySystem.Entities;
 
-namespace AlluLoader.API;
+namespace AlluLoader;
 
 public static class Chat
 {

@@ -1,4 +1,4 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 
 public static class PlayerEvents
 {

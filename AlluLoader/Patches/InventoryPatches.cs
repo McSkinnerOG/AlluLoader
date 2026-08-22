@@ -1,11 +1,11 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 using Allumeria.Blocks.BlockEntities;
 using Allumeria.EntitySystem.Entities;
 using Allumeria.Items;
 using Allumeria.Items.Crafting;
 using HarmonyLib;
 
-namespace AlluLoader.API.Patches;
+namespace AlluLoader.Patches;
 
 [HarmonyPatch]
 internal static class InventoryPatches

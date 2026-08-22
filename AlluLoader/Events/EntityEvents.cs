@@ -2,7 +2,7 @@
 using Allumeria.EntitySystem;
 using Allumeria.EntitySystem.Components;
 
-namespace AlluLoader.API.Events;
+namespace AlluLoader.Events;
 
 public class EntityEventArgs(Entity entity) : EventArgs
 { public Entity Entity { get; } = entity; }

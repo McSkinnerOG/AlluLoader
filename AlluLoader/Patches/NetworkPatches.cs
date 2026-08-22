@@ -1,8 +1,8 @@
-﻿using AlluLoader.API.Events;
+﻿using AlluLoader.Events;
 using Allumeria.Networking;
 using HarmonyLib;
 
-namespace AlluLoader.API.Patches;
+namespace AlluLoader.Patches;
 
 [HarmonyPatch]
 internal static class NetworkPatches

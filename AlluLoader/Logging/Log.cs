@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AlluLoader.API.Logging
+namespace AlluLoader.Logging
 {
     /// <summary>
     /// Simple logging for mods and the API. Writes to AlluLoader/Logs/api.log.

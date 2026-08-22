@@ -1,6 +1,6 @@
-﻿using AlluLoader.API;
-using AlluLoader.API.Events;
-using AlluLoader.API.Logging;
+﻿using AlluLoader;
+using AlluLoader.Events;
+using AlluLoader.Logging;
 using Allumeria.EntitySystem.Components;
 using Allumeria.EntitySystem.Entities;
 

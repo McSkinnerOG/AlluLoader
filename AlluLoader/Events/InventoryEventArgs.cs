@@ -2,7 +2,7 @@
 using Allumeria.EntitySystem.Entities;
 using Allumeria.Items;
 using Allumeria.Items.Crafting;
-namespace AlluLoader.API.Events;
+namespace AlluLoader.Events;
 
 public class InventoryAddItemEventArgs(Inventory inventory, ItemStack stackToAdd, bool ignoreHotbar) : EventArgs
 {

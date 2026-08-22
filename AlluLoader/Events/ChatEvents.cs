@@ -1,7 +1,7 @@
 ﻿using Allumeria.UI;
 using Allumeria.EntitySystem.Entities;
 
-namespace AlluLoader.API.Events;
+namespace AlluLoader.Events;
 
 public static class ChatEvents
 {

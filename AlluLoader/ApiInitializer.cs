@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AlluLoader.API
+namespace AlluLoader
 {
     public static class ApiInitializer
     {
@@ -11,7 +11,7 @@ namespace AlluLoader.API
         public static void Initialize()
         {
             if (Interlocked.Exchange(ref _initialized, 1) != 0) return; 
-            var harmony = new Harmony("alluloader.api");
+            var harmony = new Harmony("AlluLoader");
             harmony.PatchAll(typeof(ApiInitializer).Assembly); 
             Logging.Log.Write("AlluLoader API patches applied.");
         }

@@ -25,14 +25,14 @@ public sealed class StartupHook
 
     private static void InitializeApi()
     {
-        string apiPath = Path.Combine(AlluLoader.Paths.Libraries, "AlluLoader.API.dll");
+        string apiPath = Path.Combine(AlluLoader.Paths.Libraries, "AlluLoader.dll");
         if (!File.Exists(apiPath))
         {
             throw new FileNotFoundException("Could not find the AlluLoader API assembly.", apiPath);
         }
         AlluLoader.Log.Write($"Loading API from '{apiPath}'.");
         Assembly apiAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.GetFullPath(apiPath));
-        Type apiInitializer = apiAssembly.GetType("AlluLoader.API.ApiInitializer", throwOnError: true, ignoreCase: false)!;
+        Type apiInitializer = apiAssembly.GetType("AlluLoader.ApiInitializer", throwOnError: true, ignoreCase: false)!;
         MethodInfo initializeMethod = apiInitializer.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static, binder: null, types: Type.EmptyTypes, modifiers: null) ?? throw new MissingMethodException(apiInitializer.FullName, "Initialize");
 
         Action initialize = initializeMethod.CreateDelegate<Action>();
@@ -133,7 +133,7 @@ namespace AlluLoader
 
         private static void InitializeModEntryPoints(Assembly assembly)
         {
-            Type interfaceType = AssemblyLoadContext.Default.Assemblies.Select(a => a.GetType("AlluLoader.API.IMod")).FirstOrDefault(t => t is not null) ?? throw new TypeLoadException("AlluLoader.API.IMod is not loaded.");
+            Type interfaceType = AssemblyLoadContext.Default.Assemblies.Select(a => a.GetType("AlluLoader.IMod")).FirstOrDefault(t => t is not null) ?? throw new TypeLoadException("AlluLoader.IMod is not loaded.");
             Type[] entryPointTypes = assembly.GetTypes().Where(type => type is { IsAbstract: false, IsInterface: false } && interfaceType.IsAssignableFrom(type)).ToArray();
             if (entryPointTypes.Length == 0)
             {
