@@ -12,7 +12,7 @@
       <HintPath>../Dependencies/Allumeria.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.Mathematics">
-      <HintPath>$../Dependencies/OpenTK.Mathematics.dll</HintPath>
+      <HintPath>../Dependencies/OpenTK.Mathematics.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

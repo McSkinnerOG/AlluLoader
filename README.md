@@ -12,4 +12,6 @@
 
 1. Go into the folder where this README lives and run ``dotnet build``.
 
-1. 
+1. Go back into the folder that has ``Allumeria.exe``. Create a new folder called ``mods``. In this new folder, paste the two ``.dll`` files you created from the previous step:  ``Loader.dll`` and ``ExampleMod.dll``.
+
+1. Launch Allumeria and have fun!
