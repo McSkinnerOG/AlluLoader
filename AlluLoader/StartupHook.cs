@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using AlluLoader.Logging
+using System.Reflection;
 using System.Runtime.Loader;
 using HarmonyLib;
 
@@ -54,25 +55,6 @@ namespace AlluLoader
         public static void CreateDirectories()
         {
             foreach (string directory in new[] { Mods, Libraries, Config, Logs }) Directory.CreateDirectory(directory);
-        }
-    }
-
-    public static class Log
-    {
-        private static readonly object LockObject = new();
-        public static void Write(string message)
-        {
-            try
-            {
-                lock (LockObject)
-                {
-                    Directory.CreateDirectory(Paths.Logs);
-                    File.AppendAllText(Paths.LogFile, $"[{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss.fff zzz}] " + message + Environment.NewLine);
-                }
-            }
-            catch
-            {
-            }
         }
     }
 

@@ -23,12 +23,12 @@ namespace AlluLoader.Logging
                 var baseDir = AppContext.BaseDirectory;
                 var logsDir = Path.Combine(baseDir, "AlluLoader", "Logs");
                 Directory.CreateDirectory(logsDir);
-                _logFilePath = Path.Combine(logsDir, "api.log");
+                _logFilePath = Path.Combine(logsDir, "alluloader.log");
                 _initialized = true;
             }
             catch
             { 
-                _logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "alluloader_api.log");
+                _logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "alluloader.log");
                 _initialized = true;
             }
         }
