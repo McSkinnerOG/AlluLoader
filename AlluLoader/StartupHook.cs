@@ -15,12 +15,12 @@ public sealed class StartupHook
             AlluLoader.Paths.CreateDirectories();
             AssemblyLoadContext.Default.Resolving += AlluLoader.SharedLibraryResolver.Resolve;
             InitializeApi();
-            AlluLoader.Log.Write($"AlluLoader started. " + $"Process='{Environment.ProcessPath ?? "unknown"}', " + $"PID={Environment.ProcessId}, " + $".NET='{Environment.Version}'");
+            Log.Write($"AlluLoader started. " + $"Process='{Environment.ProcessPath ?? "unknown"}', " + $"PID={Environment.ProcessId}, " + $".NET='{Environment.Version}'");
             AlluLoader.ModLoader.LoadAll();
         }
         catch (Exception exception)
         {
-            AlluLoader.Log.Write($"Fatal loader error:{Environment.NewLine}{exception}");
+            Log.Write($"Fatal loader error:{Environment.NewLine}{exception}");
         }
     }
 
@@ -31,14 +31,14 @@ public sealed class StartupHook
         {
             throw new FileNotFoundException("Could not find the AlluLoader API assembly.", apiPath);
         }
-        AlluLoader.Log.Write($"Loading API from '{apiPath}'.");
+        Log.Write($"Loading API from '{apiPath}'.");
         Assembly apiAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.GetFullPath(apiPath));
         Type apiInitializer = apiAssembly.GetType("AlluLoader.ApiInitializer", throwOnError: true, ignoreCase: false)!;
         MethodInfo initializeMethod = apiInitializer.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static, binder: null, types: Type.EmptyTypes, modifiers: null) ?? throw new MissingMethodException(apiInitializer.FullName, "Initialize");
 
         Action initialize = initializeMethod.CreateDelegate<Action>();
         initialize();
-        AlluLoader.Log.Write("AlluLoader API initialized successfully.");
+        Log.Write("AlluLoader API initialized successfully.");
     }
 }
 
