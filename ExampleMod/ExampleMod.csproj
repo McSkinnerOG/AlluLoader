@@ -3,6 +3,6 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AlluLoader"></Reference>
+    <ProjectReference Include="../AlluLoader/AlluLoader.csproj" />
   </ItemGroup>
 </Project>
