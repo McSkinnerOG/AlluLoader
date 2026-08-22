@@ -6,5 +6,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../AlluLoader/AlluLoader.csproj" />
+    <Reference Include="Allumeria">
+      <HintPath>$(DependenciesDirectory)/Allumeria.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Mathematics">
+      <HintPath>$(DependenciesDirectory)/OpenTK.Mathematics.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
