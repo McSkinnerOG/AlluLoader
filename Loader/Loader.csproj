@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <!--https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language -->
     <Nullable>enable</Nullable>
+    <!--Copy NuGet runtime assemblies into the build output-->
+    <!--Currently, this is only needed for Harmony-->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" />

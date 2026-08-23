@@ -6,12 +6,17 @@
 
 1.  Run ``git clone`` to copy this repository, or use the download button on GitHub.
 
-1. Go into the folder (directory) that has ``Allumeria.exe``.
+1. Go into the folder (directory) that has ``Allumeria.exe``. You can find this by opening up Steam > View Game Library > Click on Allumeria > Click on the settings gear icon > Manage > Browse local files.
 
 1. Copy ``Allumeria.dll`` and ``OpenTK.Mathematics.dll`` and paste both of them into the ``Dependencies`` folder of this repository.
 
 1. Go into the folder where this README lives and run ``dotnet build``.
 
-1. Go back into the folder that has ``Allumeria.exe``. Create a new folder called ``mods``. In this new folder, paste the two ``.dll`` files you created from the previous step:  ``Loader.dll`` and ``ExampleMod.dll``.
+1. Go back into the folder that has ``Allumeria.exe``. Create a new folder called ``mods``. In this new folder, paste some of the ``.dll`` files you created from the previous step: ``0Harmony.dll`` and ``Loader.dll``.
 
-1. Launch Allumeria and have fun!
+1. Launch Allumeria and then close it (LOL)
+
+1. If you look in the ``mods`` folder, you should see some new folders: ``Config``, ``Mods``, ``Libraries``, and ``Logs``. You should also see an ``aluloader.log`` file that can help with troubleshooting. If you don't see the new folders, then something went wrong.
+
+1.
+
