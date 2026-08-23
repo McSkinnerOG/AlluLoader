@@ -1,12 +1,14 @@
-﻿using AlluLoader.Logging;
+﻿using AlluLoader;
+using AlluLoader.Logging;
+using Allumeria;
 using System.Reflection;
 using System.Runtime.Loader;
 using HarmonyLib;
 
-public sealed class StartupHook
+public sealed class Loader : IExternalLoader
 {
     private static int _initialized;
-    public static void Initialize()
+    public static void Init()
     {
         if (Interlocked.Exchange(ref _initialized, 1) != 0) return;
 
@@ -26,18 +28,7 @@ public sealed class StartupHook
 
     private static void InitializeApi()
     {
-        string apiPath = Path.Combine(AlluLoader.Paths.Libraries, "AlluLoader.dll");
-        if (!File.Exists(apiPath))
-        {
-            throw new FileNotFoundException("Could not find the AlluLoader API assembly.", apiPath);
-        }
-        Log.Write($"Loading API from '{apiPath}'.");
-        Assembly apiAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.GetFullPath(apiPath));
-        Type apiInitializer = apiAssembly.GetType("AlluLoader.ApiInitializer", throwOnError: true, ignoreCase: false)!;
-        MethodInfo initializeMethod = apiInitializer.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static, binder: null, types: Type.EmptyTypes, modifiers: null) ?? throw new MissingMethodException(apiInitializer.FullName, "Initialize");
-
-        Action initialize = initializeMethod.CreateDelegate<Action>();
-        initialize();
+        ApiInitializer.Initialize();
         Log.Write("AlluLoader API initialized successfully.");
     }
 }
@@ -46,7 +37,7 @@ namespace AlluLoader
 {
     internal static class Paths
     {
-        public static string Root { get; } = Path.Combine(AppContext.BaseDirectory, "AlluLoader");
+        public static string Root { get; } = Path.Combine(AppContext.BaseDirectory, "mods");
         public static string Mods { get; } = Path.Combine(Root, "Mods");
         public static string Libraries { get; } = Path.Combine(Root, "Libraries");
         public static string Config { get; } = Path.Combine(Root, "Config");

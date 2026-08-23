@@ -21,8 +21,7 @@ namespace AlluLoader.Logging
             try
             {
                 var baseDir = AppContext.BaseDirectory;
-                var logsDir = Path.Combine(baseDir, "AlluLoader", "Logs");
-                Directory.CreateDirectory(logsDir);
+                var logsDir = Path.Combine(baseDir, "mods");
                 _logFilePath = Path.Combine(logsDir, "alluloader.log");
                 _initialized = true;
             }

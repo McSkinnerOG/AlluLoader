@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <!--https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview-->
+    <!--https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview -->
     <ImplicitUsings>enable</ImplicitUsings>
-    <!--https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language-->
+    <!--https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language -->
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
