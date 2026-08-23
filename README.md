@@ -1,9 +1,11 @@
 # AlluLoader
 
 > [!CAUTION]
-> This repository allows developres to implement mods with an event-based framework.
-> Please note that this is not recommended for all use cases, particularly in mods
-> that will run on a client (someone's laptop) rather than a dedicated server.
+> This repository allows developers to implement mods with an event-based framework.
+> Please note that this is not recommended for all use cases, particularly for mods
+> running on a client (someone's laptop). This framework may work better for plugins
+> intended for dedicated servers. However, there is no official dedicated server 
+> software as of now.
 
 1. Get the video game Allumeria. [It's available on Steam.](https://store.steampowered.com/app/3516590/Allumeria/)
 
