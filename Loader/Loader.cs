@@ -8,10 +8,9 @@ using HarmonyLib;
 public sealed class Loader : IExternalLoader
 {
     private static int _initialized;
-    public static void Init()
+    public void Init()
     {
         if (Interlocked.Exchange(ref _initialized, 1) != 0) return;
-
         try
         {
             AlluLoader.Paths.CreateDirectories();
