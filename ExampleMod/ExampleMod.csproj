@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Loader/Loader.csproj" />
+    <Reference Include="Allumeria">
+      <HintPath>../Dependencies/Allumeria.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Mathematics">
+      <HintPath>../Dependencies/OpenTK.Mathematics.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
