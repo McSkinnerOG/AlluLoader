@@ -1,6 +1,7 @@
 # AlluLoader
 
-> [!CAUTION] This repository allows developers to implement mods with an event-based framework. Please note that this is not recommended for all use cases, particularly for mods running on a client (someone's laptop). This framework may work better for plugins intended for dedicated servers. However, there is no official dedicated server software as of now.
+> [!CAUTION]
+> This repository allows developers to implement mods with an event-based framework. Please note that this is not recommended for all use cases, particularly for mods running on a client (someone's laptop). This framework may work better for plugins intended for dedicated servers. However, there is no official dedicated server software as of now.
 
 ## Instructions
 
