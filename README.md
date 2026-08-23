@@ -1,5 +1,10 @@
 # AlluLoader
 
+> [!CAUTION]
+> This repository allows developres to implement mods with an event-based framework.
+> Please note that this is not recommended for all use cases, particularly in mods
+> that will run on a client (someone's laptop) rather than a dedicated server.
+
 1. Get the video game Allumeria. [It's available on Steam.](https://store.steampowered.com/app/3516590/Allumeria/)
 
 1. Download and install .NET 10.0 from [the official website](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
