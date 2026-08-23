@@ -18,5 +18,7 @@
 
 1. If you look in the ``mods`` folder, you should see some new folders: ``Config``, ``Mods``, ``Libraries``, and ``Logs``. You should also see an ``aluloader.log`` file that can help with troubleshooting. If you don't see the new folders, then something went wrong.
 
-1.
+1. Copy and paste ``ExampleMod.dll`` into the ``mods/Mods`` folder.
+
+1. Launch Allumeria again and enjoy!
 

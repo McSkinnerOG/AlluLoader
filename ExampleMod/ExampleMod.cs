@@ -9,6 +9,10 @@ namespace ExampleMod;
 /// <summary>
 /// Demonstrates observational, cancellable, and mutable AlluLoader events.
 /// Type "eventdemo" in chat to enable or disable the gameplay-changing examples.
+/// RATIONING 8/28 For some reason, the eventdemo command does not work. More
+///                 testing is needed but not a priority right now. On the bright
+///                 side, drowning damage was cancelled successfully during my
+///                 tests!
 /// </summary>
 public sealed class ExampleMod : IMod
 {

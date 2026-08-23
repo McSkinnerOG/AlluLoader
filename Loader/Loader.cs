@@ -24,7 +24,11 @@ public sealed class Loader : IExternalLoader
             Log.Write($"Fatal loader error:{Environment.NewLine}{exception}");
         }
     }
-
+    /// <summary>
+    /// This method was originally a lot longer and had more logic
+    /// However, it can now be simplified because there is no additional .exe
+    /// and no additional .dll for the API
+    /// </summary>
     private static void InitializeApi()
     {
         ApiInitializer.Initialize();
