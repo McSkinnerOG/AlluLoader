@@ -1,11 +1,8 @@
 # AlluLoader
 
-> [!CAUTION]
-> This repository allows developers to implement mods with an event-based framework.
-> Please note that this is not recommended for all use cases, particularly for mods
-> running on a client (someone's laptop). This framework may work better for plugins
-> intended for dedicated servers. However, there is no official dedicated server 
-> software as of now.
+> [!CAUTION] This repository allows developers to implement mods with an event-based framework. Please note that this is not recommended for all use cases, particularly for mods running on a client (someone's laptop). This framework may work better for plugins intended for dedicated servers. However, there is no official dedicated server software as of now.
+
+## Instructions
 
 1. Get the video game Allumeria. [It's available on Steam.](https://store.steampowered.com/app/3516590/Allumeria/)
 
@@ -29,3 +26,12 @@
 
 1. Launch Allumeria again and enjoy!
 
+## Authors
+- [@McSkinnerOG](https://www.github.com/McSkinnerOG)
+- [@rationing](https://github.com/rationing)
+
+## Contributions
+Please create [pull requests](https://github.com/McSkinnerOG/AlluLoader/pulls) and [issues](https://github.com/McSkinnerOG/AlluLoader/issues) for suggestions, bug reports, and feedback. Make sure to read other pull requests and issues to prevent duplicates.
+
+## Disclaimer
+AlluLoader is an unofficial community project. It is not affiliated with or endorsed by the developer of Allumeria. 
